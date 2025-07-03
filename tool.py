@@ -79,11 +79,11 @@ st.markdown("""
             justify-content: space-between;
             align-items: center;
             margin-bottom: 30px;
-            padding-top: 10px;  /* Reduced from 20px to 10px */
+            padding-top: 10px;  
         }
 
         .golcha-logo-wrapper img {
-            height: 100px;  /* Increased from 65px to 100px */
+            height: 100px;  
             border-radius: 8px;
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
        }
@@ -156,6 +156,22 @@ if page == "🏠 Home":
 
 # ------------------ PRICING TOOL ------------------
 elif page == "📦 Price Calculator":
+    import os
+
+logo_path = "D:/Pricing tool/icons/Golcha-Logo.png"
+if os.path.exists(logo_path):
+    encoded_logo = base64.b64encode(open(logo_path, "rb").read()).decode()
+    logo_html = f"""
+        <div class="golcha-logo-wrapper">
+            <h1>🏠 Welcome to the Pricing Tool</h1>
+            <img src="data:image/png;base64,{encoded_logo}" alt="Golcha Logo">
+        </div>
+    """
+else:
+    logo_html = "<h1>🏠 Welcome to the Pricing Tool</h1><p style='color: red;'>⚠️ Golcha logo not found</p>"
+
+st.markdown(logo_html, unsafe_allow_html=True)
+
     # --- Define reset function FIRST ---
     def reset_all():
         st.session_state.qty_state = {}
