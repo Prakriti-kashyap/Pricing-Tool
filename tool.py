@@ -1,53 +1,220 @@
 import streamlit as st
+import base64
 
-# Simulated large dataset (can scale to 1000s of fields)
-data = {
-    "Laptop": {f"Laptop Option {i}": i * 100 for i in range(1, 101)},
-    "Phone": {f"Phone Feature {i}": i * 50 for i in range(1, 201)},
-    "Tablet": {f"Tablet Addon {i}": i * 75 for i in range(1, 151)},
-    "Monitor": {f"Monitor Spec {i}": i * 90 for i in range(1, 121)},
-    "Printer": {f"Printer Feature {i}": i * 40 for i in range(1, 81)},
-    "Machine": {f"Machine Feature {i}": i * 40 for i in range(1, 81)},
+# --- Helper to load icons as Base64 ---
+def load_icon(path):
+    with open(path, "rb") as f:
+        return base64.b64encode(f.read()).decode()
+
+# --- Load all icons ---
+icon_app = load_icon("D:/Pricing tool/img1.png")
+icon_seg = load_icon("D:/Pricing tool/img2.png")
+icon_mach = load_icon("D:/Pricing tool/machine.png")
+icon_mesh = load_icon("D:/Pricing tool/mesh-micro.png")
+icon_white = load_icon("D:/Pricing tool/whiteness.png")
+icon_kg = load_icon("D:/Pricing tool/weight.png")
+icon_type = load_icon("D:/Pricing tool/category.png")
+
+# --- CSS Styling ---
+st.set_page_config(layout="wide", page_title="Pricing Tool")
+
+st.markdown("""
+    <style>
+        .main > div:first-child {
+            padding-top: 30px !important;
+            margin-top: 0px !important;
+        }
+
+        .after-title-gap {
+            margin-top: 40px;
+        }
+
+        .stApp {
+            padding-left: 5vw;
+            padding-right: 5vw;
+            max-width: 2400px;
+            margin: auto;
+        }
+
+        .qty-box {
+            text-align: center;
+            padding: 6px 12px;
+            background-color: #f5f5f5;
+            border-radius: 8px;
+            display: inline-block;
+            min-width: 45px;
+            font-weight: bold;
+            font-size: 16px;
+        }
+
+        .icon-title {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            font-size: 26px;
+            font-weight: 600;
+            margin-bottom: 10px;
+            margin-top: 20px;
+        }
+
+        .icon-title img {
+            height: 42px;
+            width: auto;
+        }
+
+        hr {
+            border: none;
+            border-top: 1px solid #ccc;
+            margin: 3rem 0;
+        }
+
+        .stMultiSelect:hover {
+            transform: scale(1.01);
+            transition: 0.2s ease-in-out;
+        }
+    </style>
+""", unsafe_allow_html=True)
+
+# --- Catalog ---
+catalog = {
+    "Applications": {"ABC": 100, "DEF": 150, "XYZ": 120, "LMN": 110, "PQR": 130, "TUV": 160, "GHI": 170},
+    "Segment": {"Industrial": 300, "Food Grade": 450, "Pharma": 600, "Mining": 400},
+    "Machine": {"M1": 1000, "M2": 1200, "M3": 900, "M4": 300},
+    "Mesh/Micro": {"150 Mesh": 150, "200 Mesh": 180, "300 Mesh": 210, "400 Mesh": 250},
+    "Whiteness": {"Standard": 50, "High": 80, "Ultra": 120, "Super High": 180},
+    "Packing > KG": {"25 KG": 25, "50 KG": 40, "75 KG": 75, "100 KG": 100},
+    "Packing > Type": {"HDPE": 10, "Paper Bag": 15, "Jumbo Bag": 30, "Plastic Bag": 40}
 }
 
-st.set_page_config("Pricing  Tool", layout="wide")
-st.title("🧾 Pricing Tool")
+# --- Session Init ---
+if "qty_state" not in st.session_state:
+    st.session_state.qty_state = {}
 
-# --- Select Multiple Items ---
-selected_items = st.multiselect("Select Items", list(data.keys()))
+# --- Sidebar Navigation ---
+page = st.sidebar.radio("🔘 Navigate", ["🏠 Home", "📦 Price Calculator"])
 
-# --- Field selections stored dynamically ---
-selected_fields = {}
+# ------------------ HOME ------------------
+if page == "🏠 Home":
+    st.title("🏠 Welcome to the Pricing Tool")
+    st.markdown('<div class="after-title-gap"></div>', unsafe_allow_html=True)
 
-if selected_items:
-    st.markdown("### 🔧 Configure Fields for Each Item")
 
-    for item in selected_items:
-        with st.expander(f"Select options for: **{item}**"):
-            options = list(data[item].keys())
-            chosen_fields = st.multiselect(f"{item} Options", options, key=f"{item}_fields")
-            if chosen_fields:
-                selected_fields[item] = chosen_fields
 
-# --- Submit Button ---
-if st.button("Submit"):
-    if not selected_fields:
-        st.warning("Please select at least one field.")
-    else:
-        total_price = 0
-        st.success("✅ Price Summary")
+    st.markdown("""
+        This is a **multi-level, dynamic pricing calculator** for your business needs.
 
-        for item, fields in selected_fields.items():
-            st.markdown(f"#### 🛠️ {item}")
-            item_total = sum(data[item][field] for field in fields)
-            total_price += item_total
-            for field in fields:
-                st.write(f"✔️ {field} — ₹{data[item][field]}")
+        ### 💡 Features:
+        - 🔻 Expand/collapse input categories
+        - ➕➖ Quantity controls
+        - 📦 Multi-field selection
+        - 💰 Calculate total cost
+    """)
 
-            st.markdown(f"**Subtotal for {item}: ₹{item_total}**")
-            st.markdown("---")
+# ------------------ PRICING TOOL ------------------
+elif page == "📦 Price Calculator":
+    # --- Define reset function FIRST ---
+    def reset_all():
+        st.session_state.qty_state = {}
+        for key in list(st.session_state.keys()):
+            if key.endswith("_select"):
+                st.session_state[key] = []
 
-        st.header(f"💰 Grand Total: ₹{total_price}")
+
+    # --- Page Title and Reset Button ---
+    st.title("📦 Pricing Tool")
+    st.markdown('<div class="after-title-gap"></div>', unsafe_allow_html=True)
+
+    if st.button("🧹 Reset Selections", key="reset_button"):
+        reset_all()
+
+    # --- Section Renderer ---
+    selected_items = {}
+
+
+    def render_section(title, options_dict, key_prefix="", icon=None):
+        st.markdown(f"""
+            <div class="icon-title">
+                <img src="data:image/png;base64,{icon}" />
+                <span>{title}</span>
+            </div>
+        """, unsafe_allow_html=True)
+
+        selections = st.multiselect(
+            label="",
+            options=list(options_dict.keys()),
+            key=f"{key_prefix}_select",
+            placeholder=f"🔍 Search {title}"
+        )
+
+        for opt in selections:
+            state_key = f"{key_prefix}_{opt}_qty"
+            if state_key not in st.session_state.qty_state:
+                st.session_state.qty_state[state_key] = 1
+
+            col1, col2, col3, col4 = st.columns([2.5, 1, 1, 2.5])
+            with col1:
+                st.markdown(f"**{opt}** — ₹{options_dict[opt]}")
+            with col2:
+                if st.button("➖", key=f"{state_key}_dec") and st.session_state.qty_state[state_key] > 1:
+                    st.session_state.qty_state[state_key] -= 1
+            with col3:
+                st.markdown(f"<div class='qty-box'>{st.session_state.qty_state[state_key]}</div>",
+                            unsafe_allow_html=True)
+            with col4:
+                if st.button("➕", key=f"{state_key}_inc"):
+                    st.session_state.qty_state[state_key] += 1
+
+            selected_items[f"{title} > {opt}"] = (options_dict[opt], st.session_state.qty_state[state_key])
+
+
+    # --- Sections ---
+    st.markdown("### 🧩 Applications & Segment")
+    col1, col2 = st.columns([1, 1], gap="large")
+    with col1:
+        render_section("Applications", catalog["Applications"], key_prefix="app", icon=icon_app)
+    with col2:
+        render_section("Segment", catalog["Segment"], key_prefix="seg", icon=icon_seg)
+
+    st.markdown("<hr>", unsafe_allow_html=True)
+
+    st.markdown("### ⚙️ Machine, Mesh & Whiteness")
+    col3, col4, col5 = st.columns([1, 1, 1], gap="large")
+    with col3:
+        render_section("Machine", catalog["Machine"], key_prefix="mach", icon=icon_mach)
+    with col4:
+        render_section("Mesh/Micro", catalog["Mesh/Micro"], key_prefix="mesh", icon=icon_mesh)
+    with col5:
+        render_section("Whiteness", catalog["Whiteness"], key_prefix="white", icon=icon_white)
+
+    st.markdown("<hr>", unsafe_allow_html=True)
+
+    st.markdown("### 📦 Packing")
+    col6, col7 = st.columns([1, 1], gap="large")
+    with col6:
+        render_section("Packing > KG", catalog["Packing > KG"], key_prefix="kg", icon=icon_kg)
+    with col7:
+        render_section("Packing > Type", catalog["Packing > Type"], key_prefix="ptype", icon=icon_type)
+
+    st.markdown("<hr>", unsafe_allow_html=True)
+
+    # --- Calculate Button & Summary ---
+    if st.button("💰 Calculate Total", key="calc_total"):
+        if selected_items:
+            total = 0
+            st.subheader("🧾 Price Summary")
+            for name, (price, qty) in selected_items.items():
+                subtotal = price * qty
+                total += subtotal
+                st.markdown(f"- **{name}**: ₹{price} × {qty} = ₹{subtotal}")
+            st.success(f"### ✅ Grand Total: ₹{total}")
+        else:
+            st.warning("⚠️ Please select at least one option.")
+
+    # --- Recent Selections AFTER total ---
+    if selected_items:
+        st.markdown("#### 🕓 Recent Selections")
+        for name, (price, qty) in selected_items.items():
+            st.markdown(f"- **{name}**: ₹{price} × {qty}")
 
 
 
