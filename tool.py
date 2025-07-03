@@ -173,11 +173,11 @@ else:
 st.markdown(logo_html, unsafe_allow_html=True)
 
     # --- Define reset function FIRST ---
-    def reset_all():
-        st.session_state.qty_state = {}
-        for key in list(st.session_state.keys()):
-            if key.endswith("_select"):
-                st.session_state[key] = []
+def reset_all():
+    st.session_state.qty_state = {}
+    for key in list(st.session_state.keys()):
+        if key.endswith("_select"):
+            st.session_state[key] = []
 
 
     # --- Page Title and Reset Button ---
