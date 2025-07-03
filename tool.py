@@ -150,7 +150,7 @@ if page == "🏠 Home":
 elif page == "📦 Price Calculator":
     import os
 
-    logo_path = "D:/Pricing tool/icons/Golcha-Logo.png"
+    logo_path = "Golcha-Logo.png"
     if os.path.exists(logo_path):
         encoded_logo = base64.b64encode(open(logo_path, "rb").read()).decode()
         logo_html = f"""
