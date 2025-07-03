@@ -2,9 +2,16 @@ import streamlit as st
 import base64
 
 # --- Helper to load icons as Base64 ---
+import os
+
 def load_icon(path):
-    with open(path, "rb") as f:
-        return base64.b64encode(f.read()).decode()
+    if os.path.exists(path):
+        with open(path, "rb") as f:
+            return base64.b64encode(f.read()).decode()
+    else:
+        st.warning(f"⚠️ File not found: {path}")
+        return ""
+
 
 # --- Load all icons ---
 icon_app = load_icon("D:\Pricing tool\icons\img1.png")
