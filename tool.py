@@ -14,13 +14,13 @@ def load_icon(path):
 
 
 # --- Load all icons ---
-icon_app = load_icon("img1.png")
-icon_seg = load_icon("img2.png")
-icon_mach = load_icon("machine.png")
-icon_mesh = load_icon("mesh-micro.png")
-icon_white = load_icon("whiteness.png")
-icon_kg = load_icon("weight.png")
-icon_type = load_icon("category.png")
+icon_app = load_icon("D:\Pricing tool\icons\img1.png")
+icon_seg = load_icon("D:\Pricing tool\icons\img2.png")
+icon_mach = load_icon("D:\Pricing tool\icons\machine.png")
+icon_mesh = load_icon("D:\Pricing tool\icons\mesh-micro.png")
+icon_white = load_icon("D:\Pricing tool\icons\whiteness.png")
+icon_kg = load_icon("D:\Pricing tool\icons\weight.png")
+icon_type = load_icon("D:\Pricing tool\icons\category.png")
 
 # --- CSS Styling ---
 st.set_page_config(layout="wide", page_title="Pricing Tool")
@@ -28,7 +28,7 @@ st.set_page_config(layout="wide", page_title="Pricing Tool")
 st.markdown("""
     <style>
         .main > div:first-child {
-            padding-top: 0px !important;
+            padding-top: 30px !important;
             margin-top: 0px !important;
         }
 
@@ -69,18 +69,33 @@ st.markdown("""
             width: auto;
         }
 
-        hr {
-            border: none;
-            border-top: 1px solid #ccc;
-            margin: 3rem 0;
-        }
-
         .stMultiSelect:hover {
             transform: scale(1.01);
             transition: 0.2s ease-in-out;
         }
+
+        .golcha-logo-wrapper {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            padding-top: 20px;
+        }
+
+        .golcha-logo-wrapper img {
+            height: 65px;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .golcha-logo-wrapper h1 {
+            margin: 0;
+            font-size: 32px;
+            font-weight: 700;
+        }
     </style>
 """, unsafe_allow_html=True)
+
 
 # --- Catalog ---
 catalog = {
@@ -102,20 +117,41 @@ page = st.sidebar.radio("🔘 Navigate", ["🏠 Home", "📦 Price Calculator"])
 
 # ------------------ HOME ------------------
 if page == "🏠 Home":
-    st.title("🏠 Welcome to the Pricing Tool")
+    import os
+
+    # --- Load and encode Golcha Group logo ---
+    logo_path = "Golcha-Logo.png"
+    if os.path.exists(logo_path):
+        encoded_logo = base64.b64encode(open(logo_path, "rb").read()).decode()
+        logo_html = f"""
+            <div class="golcha-logo-wrapper">
+                <h1>🏠 Welcome to the Pricing Tool</h1>
+                <img src="data:image/png;base64,{encoded_logo}" alt="Golcha Logo">
+            </div>
+        """
+    else:
+        logo_html = """
+            <div class="golcha-logo-wrapper">
+                <h1>🏠 Welcome to the Pricing Tool</h1>
+                <p style='color: red;'>⚠️ Golcha logo not found</p>
+            </div>
+        """
+
+    # --- Render the title + logo block ---
+    st.markdown(logo_html, unsafe_allow_html=True)
     st.markdown('<div class="after-title-gap"></div>', unsafe_allow_html=True)
 
-
-
+    # --- Feature Highlights ---
     st.markdown("""
         This is a **multi-level, dynamic pricing calculator** for your business needs.
 
         ### 💡 Features:
-        - 🔻 Expand/collapse input categories
-        - ➕➖ Quantity controls
-        - 📦 Multi-field selection
-        - 💰 Calculate total cost
+        - 🔻 Expand/collapse input categories  
+        - ➕➖ Quantity controls  
+        - 📦 Multi-field selection  
+        - 💰 Calculate total cost  
     """)
+
 
 # ------------------ PRICING TOOL ------------------
 elif page == "📦 Price Calculator":
