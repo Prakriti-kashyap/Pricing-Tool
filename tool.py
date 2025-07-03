@@ -160,9 +160,11 @@ elif page == "📦 Price Calculator":
             </div>
         """
     else:
-        st.markdown("""
-    <h1 style="font-size: 42px; margin-bottom: 10px;">📦 Pricing Tool</h1>
-""", unsafe_allow_html=True)
+        st.title("📦 Pricing Tool")
+    st.markdown('<div class="after-title-gap"></div>', unsafe_allow_html=True)
+
+    if st.button("🧹 Reset Selections", key="reset_button"):
+        reset_all()
 
 
     # --- Reset Function ---
