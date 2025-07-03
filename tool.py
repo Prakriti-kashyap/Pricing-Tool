@@ -120,8 +120,7 @@ page = st.sidebar.radio("🔘 Navigate", ["🏠 Home", "📦 Price Calculator"])
 if page == "🏠 Home":
     import os
 
-    # --- Load and encode Golcha Group logo ---
-    logo_path = "Golcha-Logo.png"
+    logo_path = "D:/Pricing tool/icons/Golcha-Logo.png"
     if os.path.exists(logo_path):
         encoded_logo = base64.b64encode(open(logo_path, "rb").read()).decode()
         logo_html = f"""
@@ -131,18 +130,11 @@ if page == "🏠 Home":
             </div>
         """
     else:
-        logo_html = """
-            <div class="golcha-logo-wrapper">
-                <h1>🏠 Welcome to the Pricing Tool</h1>
-                <p style='color: red;'>⚠️ Golcha logo not found</p>
-            </div>
-        """
+        logo_html = "<h1>🏠 Welcome to the Pricing Tool</h1><p style='color: red;'>⚠️ Logo not found</p>"
 
-    # --- Render the title + logo block ---
     st.markdown(logo_html, unsafe_allow_html=True)
     st.markdown('<div class="after-title-gap"></div>', unsafe_allow_html=True)
 
-    # --- Feature Highlights ---
     st.markdown("""
         This is a **multi-level, dynamic pricing calculator** for your business needs.
 
@@ -158,34 +150,34 @@ if page == "🏠 Home":
 elif page == "📦 Price Calculator":
     import os
 
-logo_path = "D:/Pricing tool/icons/Golcha-Logo.png"
-if os.path.exists(logo_path):
-    encoded_logo = base64.b64encode(open(logo_path, "rb").read()).decode()
-    logo_html = f"""
-        <div class="golcha-logo-wrapper">
-            <h1>🏠 Welcome to the Pricing Tool</h1>
-            <img src="data:image/png;base64,{encoded_logo}" alt="Golcha Logo">
-        </div>
-    """
-else:
-    logo_html = "<h1>🏠 Welcome to the Pricing Tool</h1><p style='color: red;'>⚠️ Golcha logo not found</p>"
+    logo_path = "D:/Pricing tool/icons/Golcha-Logo.png"
+    if os.path.exists(logo_path):
+        encoded_logo = base64.b64encode(open(logo_path, "rb").read()).decode()
+        logo_html = f"""
+            <div class="golcha-logo-wrapper">
+                <h1>📦 Pricing Tool</h1>
+                <img src="data:image/png;base64,{encoded_logo}" alt="Golcha Logo">
+            </div>
+        """
+    else:
+        logo_html = "<h1>📦 Pricing Tool</h1><p style='color: red;'>⚠️ Logo not found</p>"
 
-st.markdown(logo_html, unsafe_allow_html=True)
-
-    # --- Define reset function FIRST ---
-def reset_all():
-    st.session_state.qty_state = {}
-    for key in list(st.session_state.keys()):
-        if key.endswith("_select"):
-            st.session_state[key] = []
-
-
-    # --- Page Title and Reset Button ---
-    st.title("📦 Pricing Tool")
+    st.markdown(logo_html, unsafe_allow_html=True)
     st.markdown('<div class="after-title-gap"></div>', unsafe_allow_html=True)
 
+    # --- Reset Function ---
+    def reset_all():
+        st.session_state.qty_state = {}
+        for key in list(st.session_state.keys()):
+            if key.endswith("_select"):
+                st.session_state[key] = []
+
+    # --- Reset Button ---
     if st.button("🧹 Reset Selections", key="reset_button"):
         reset_all()
+        st.experimental_rerun()
+
+    # Continue with your calculator logic...
 
     # --- Section Renderer ---
     selected_items = {}
