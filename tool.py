@@ -28,7 +28,7 @@ st.set_page_config(layout="wide", page_title="Pricing Tool")
 st.markdown("""
     <style>
         .main > div:first-child {
-            padding-top: 10px !important;
+            padding-top: 0px !important;
             margin-top: 0px !important;
         }
 
