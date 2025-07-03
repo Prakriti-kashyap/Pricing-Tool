@@ -121,7 +121,7 @@ if page == "🏠 Home":
     import os
 
     logo_path = "Golcha-Logo.png"
-    if os.path.exists(logo_path):
+    if os.path.exists("Golcha-Logo.png"):
         encoded_logo = base64.b64encode(open(logo_path, "rb").read()).decode()
         logo_html = f"""
             <div class="golcha-logo-wrapper">
@@ -150,34 +150,33 @@ if page == "🏠 Home":
 elif page == "📦 Price Calculator":
     import os
 
-    logo_path = "Golcha-Logo.png"
-    if os.path.exists(logo_path):
-        encoded_logo = base64.b64encode(open(logo_path, "rb").read()).decode()
-        logo_html = f"""
-            <div class="golcha-logo-wrapper">
-                <h1>📦 Pricing Tool</h1>
-                <img src="data:image/png;base64,{encoded_logo}" alt="Golcha Logo">
-            </div>
-        """
-    else:
-        st.title("📦 Pricing Tool")
-    st.markdown('<div class="after-title-gap"></div>', unsafe_allow_html=True)
+    if os.path.exists("Golcha-Logo.png"):
+    encoded_logo = base64.b64encode(open(logo_path, "rb").read()).decode()
+    logo_html = f"""
+        <div class="golcha-logo-wrapper">
+            <h1>📦 Pricing Tool</h1>
+            <img src="data:image/png;base64,{encoded_logo}" alt="Golcha Logo">
+        </div>
+    """
+    st.markdown(logo_html, unsafe_allow_html=True)
+else:
+    st.title("📦 Pricing Tool")
 
-    if st.button("🧹 Reset Selections", key="reset_button"):
-        reset_all()
 
 
     # --- Reset Function ---
-    def reset_all():
-        st.session_state.qty_state = {}
-        for key in list(st.session_state.keys()):
-            if key.endswith("_select"):
-                st.session_state[key] = []
+    # --- Reset Function ---
+def reset_all():
+    st.session_state.qty_state = {}
+    for key in list(st.session_state.keys()):
+        if key.endswith("_select"):
+            st.session_state[key] = []
 
-    # --- Reset Button ---
-    if st.button("🧹 Reset Selections", key="reset_button"):
-        reset_all()
-        st.experimental_rerun()
+# --- Reset Button ---
+if st.button("🧹 Reset Selections", key="reset_button"):
+    reset_all()
+    st.experimental_rerun()
+
 
     # Continue with your calculator logic...
 
