@@ -79,20 +79,21 @@ st.markdown("""
             justify-content: space-between;
             align-items: center;
             margin-bottom: 30px;
-            padding-top: 20px;
+            padding-top: 10px;  /* Reduced from 20px to 10px */
         }
 
         .golcha-logo-wrapper img {
-            height: 65px;
+            height: 100px;  /* Increased from 65px to 100px */
             border-radius: 8px;
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-        }
+       }
 
-        .golcha-logo-wrapper h1 {
+       .golcha-logo-wrapper h1 {
             margin: 0;
             font-size: 32px;
             font-weight: 700;
-        }
+       }
+
     </style>
 """, unsafe_allow_html=True)
 
