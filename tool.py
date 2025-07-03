@@ -160,10 +160,10 @@ elif page == "📦 Price Calculator":
             </div>
         """
     else:
-        logo_html = "<h1>📦 Pricing Tool</h1><p style='color: red;'>⚠️ Logo not found</p>"
+        st.markdown("""
+    <h1 style="font-size: 42px; margin-bottom: 10px;">📦 Pricing Tool</h1>
+""", unsafe_allow_html=True)
 
-    st.markdown(logo_html, unsafe_allow_html=True)
-    st.markdown('<div class="after-title-gap"></div>', unsafe_allow_html=True)
 
     # --- Reset Function ---
     def reset_all():
