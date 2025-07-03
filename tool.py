@@ -121,9 +121,9 @@ if page == "🏠 Home":
     import os
 
     logo_path = "Golcha-Logo.png"
-    if os.path.exists("Golcha-Logo.png"):
-        encoded_logo = base64.b64encode(open(logo_path, "rb").read()).decode()
-        logo_html = f"""
+     if os.path.exists("Golcha-Logo.png"):
+         encoded_logo = base64.b64encode(open(logo_path, "rb").read()).decode()
+         logo_html = f"""
             <div class="golcha-logo-wrapper">
                 <h1>🏠 Welcome to the Pricing Tool</h1>
                 <img src="data:image/png;base64,{encoded_logo}" alt="Golcha Logo">
