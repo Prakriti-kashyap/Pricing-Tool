@@ -14,13 +14,13 @@ def load_icon(path):
 
 
 # --- Load all icons ---
-icon_app = load_icon("D:\Pricing tool\icons\img1.png")
-icon_seg = load_icon("D:\Pricing tool\icons\img2.png")
-icon_mach = load_icon("D:\Pricing tool\icons\machine.png")
-icon_mesh = load_icon("D:\Pricing tool\icons\mesh-micro.png")
-icon_white = load_icon("D:\Pricing tool\icons\whiteness.png")
-icon_kg = load_icon("D:\Pricing tool\icons\weight.png")
-icon_type = load_icon("D:\Pricing tool\icons\category.png")
+icon_app = load_icon("Pricing tool\icons\img1.png")
+icon_seg = load_icon("Pricing tool\icons\img2.png")
+icon_mach = load_icon("Pricing tool\icons\machine.png")
+icon_mesh = load_icon("Pricing tool\icons\mesh-micro.png")
+icon_white = load_icon("Pricing tool\icons\whiteness.png")
+icon_kg = load_icon("Pricing tool\icons\weight.png")
+icon_type = load_icon("Pricing tool\icons\category.png")
 
 # --- CSS Styling ---
 st.set_page_config(layout="wide", page_title="Pricing Tool")
